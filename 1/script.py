@@ -1,5 +1,5 @@
-
 task = open("task.txt","r")
+# task = open("example.txt","r")
 
 currElf = 0
 currCaloriesSum = 0
@@ -19,6 +19,10 @@ for row in task:
         currCaloriesSum = 0
     else:
        currCaloriesSum += int(row)
+
+if(topElfSum<currCaloriesSum):
+    topElf = currElf
+    topElfSum = currCaloriesSum
 
 caloriesList.sort(reverse=True)
 
