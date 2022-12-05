@@ -1,6 +1,6 @@
 
-#task = open("example.txt","r")
-task = open("task.txt","r")
+#task = open("./2/example.txt","r")
+task = open("./2/task.txt","r")
 # A - Rock Score: 1
 # B - Paper Score: 2
 # C - Scissors Score: 3

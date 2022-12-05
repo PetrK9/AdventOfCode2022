@@ -1,5 +1,5 @@
-task = open("task.txt","r")
-# task = open("example.txt","r")
+task = open("./1/task.txt","r")
+# task = open("./1/example.txt","r")
 
 currElf = 0
 currCaloriesSum = 0
