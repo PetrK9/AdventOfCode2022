@@ -44,7 +44,6 @@ def prepareData():
     prepareComandTable = False
 
     for row in task:
-
         if prepareComandTable:
             currComRowSplit = row.split(' ')
             currComand = []
@@ -62,9 +61,21 @@ def prepareData():
 
 def DoAllMovements(comandList, warehouse, typeCrane):
     for currComand in comandList:
-        warehouse = MoveItems(currComand,warehouse)
+        if(typeCrane == '9000'):
+            warehouse = MoveItems(currComand,warehouse)
+        if(typeCrane == '9001'):
+            warehouse = MoveGroupItems(currComand,warehouse)
         # print('_'*10)
-        # DisplayArray(warehouse)
+        # DisplayArray(warehouse)¨
+    
+    return warehouse
+
+def MoveGroupItems(comad,warehouse):
+    if(comad[0] == 1):
+        return MoveItem(warehouse,comad[1]-1,comad[2]-1)
+    else:
+        warehouse, items = GetItems(warehouse, comad[1]-1, comad[0])
+        return InserItems(warehouse,comad[2]-1,items)
 
 
 def MoveItems(comad,warehouse):
@@ -96,17 +107,56 @@ def InserItem(warehouse,col, item):
             warehouse[j-1][col] = item
             return warehouse
 
+def GetItems(warehouse,col, count):
+    items = []
+    for j in range(0, len(warehouse)):
+        if warehouse[j][col] != '0':
+            for k in range(0, count):
+                items.append(warehouse[j+k][col])
+                warehouse[j+k][col] = '0'
+            
+            return warehouse, items
+
+def InserItems(warehouse,col,items):
+    for j in range(0, len(warehouse)):
+        if warehouse[j][col] != '0':
+            for i in range(0,len(items)):
+                if(j-1-i) <0:
+                    warehouse.insert(0,['0' for i in range(len(warehouse[0]))] )             
+                    warehouse[0][col] = items.pop()
+                else:
+                    warehouse[j-1-i][col] = items.pop()
+            return warehouse
+
+def PrintTopLetters(warehouse):
+    message = ''
+    for i in range(0,len(warehouse[0])):
+        
+        for j in range(0,len(warehouse)):
+            if(warehouse[j][i]) != '0':
+                message += warehouse[j][i]
+                break
+
+    print(message)      
+
 
 
 prepareData()
 DisplayArray(RawWarehouse)
 Warehouse = prepareWarehouse(RawWarehouse)
-WarehouseOriginal = Warehouse
+
 print("="*3 + "Warehouse" + "="*3)
 DisplayArray(Warehouse)
 print("="*10)
-DoAllMovements(comands, Warehouse, '9000')
-DoAllMovements(comands, WarehouseOriginal, '9001')
+WarehouseMoved = DoAllMovements(comands, Warehouse, '9000')
+print("="*3 + "CrateMover 9000" + "="*3)
+PrintTopLetters(WarehouseMoved)
+
+print("="*3 + "CrateMover 9001" + "="*3)
+Warehouse = prepareWarehouse(RawWarehouse)
+WarehouseMoved = DoAllMovements(comands, Warehouse, '9001')
+PrintTopLetters(WarehouseMoved)
+
 # DisplayArray(comands)
 
 
